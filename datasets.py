@@ -24,7 +24,7 @@ def make_dataset(data_path, alphabet, num_class, num_char):
     for img_name in img_names:
         img_path = os.path.join(data_path, img_name)
         target_str = img_name.split('.')[0]
-        assert len(target_str) == num_char
+        # assert len(target_str) == num_char
         target = []
         for char in target_str:
             vec = [0] * num_class
