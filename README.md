@@ -20,6 +20,3 @@
  
  ## 效果展示
  ![demo](./pic/demo.jpg) 
- 
- ## 训练集大小与精度的关系
- ![dir](./pic/dict.jpg) 

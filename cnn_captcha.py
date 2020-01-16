@@ -13,15 +13,20 @@ model_path = './model.pth'
 cnn = CNN()
 if torch.cuda.is_available():
     cnn = cnn.cuda()
-cnn.eval()
-cnn.load_state_dict(torch.load(model_path))
+    cnn.eval()
+    cnn.load_state_dict(torch.load(model_path))
+else:
+    cnn.eval()
+    cnn.load_state_dict(torch.load(model_path, map_location='cpu'))
 
 # img_path：单张图片路径
 def captchaByPath(img_path):
     img = Image.open(img_path)
     img = to_tensor(img)
-    img = img.view(1, 3, 32, 120).cuda()
-
+    if torch.cuda.is_available():
+        img = img.view(1, 3, 32, 120).cuda()
+    else:
+        img = img.view(1, 3, 32, 120)
     output = cnn(img)
     output = output.view(-1, 36)
     output = nn.functional.softmax(output, dim=1)
@@ -36,7 +41,10 @@ def captchaByDir(img_dir):
     lable = []
 
     for k, (img, target) in enumerate(dataset):
-        img = img.view(1, 3, 32, 120).cuda()
+        if torch.cuda.is_available():
+            img = img.view(1, 3, 32, 120).cuda()
+        else:
+            img = img.view(1, 3, 32, 120)
         output = cnn(img)
         output = output.view(-1, 36)
         output = nn.functional.softmax(output, dim=1)
